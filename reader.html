@@ -167,7 +167,7 @@
 
         async fetchBookMetadata() {
             try {
-                const response = await fetch('/book_final.txt');
+                const response = await fetch('RussiaThroughForeignEyes/book_final.txt');
                 const text = await response.text();
                 // Подсчитываем количество глав
                 const chapters = text.split(/(?=# )/).filter(Boolean);
