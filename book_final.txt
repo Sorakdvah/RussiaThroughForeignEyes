@@ -148,8 +148,8 @@ images/2.jpg
       <td>////</td>
     </tr>
     <tr>
-      <td>//||ИТОГО: 40 рублей||//</td>
-      <td>////</td>
+      <td align="right">//||ИТОГО:||//</td>
+      <td>//||40 рублей||//</td>
     </tr>
   </tbody>
 </table>
