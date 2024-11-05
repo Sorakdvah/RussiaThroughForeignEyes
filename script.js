@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h3>Свяжитесь с нами</h3>
                     <p>Email: info@russianviews.org</p>
                     <p>Телефон: +7 (XXX) XXX-XX-XX</p>
-                    <p>Адрес: г. Москва, ул. Примерная, д. 123</p>
+                    <p>Адрес: г. Сочи, ул. Навагинская, д. 42</p>
                 </div>
             </div>
         `
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h1 class="book-detail-title">${book.title}</h1>
                         <p class="book-detail-author">${book.author}, ${book.year}</p>
                         <p class="book-detail-description">${book.description}</p>
-                        <a href="https://storage.yandexcloud.net/russiathroughforeigneyes/reader.html" class="read-button">Читать</a>
+                        <a href="reader.html" class="read-button">Читать</a>
                     </div>
                 </div>
             </div>
