@@ -167,7 +167,7 @@
 
         async fetchBookMetadata() {
             try {
-                const response = await fetch('RussiaThroughForeignEyes/book_final.txt');
+                const response = await fetch('/book_final.txt');
                 const text = await response.text();
                 // Подсчитываем количество глав
                 const chapters = text.split(/(?=# )/).filter(Boolean);
@@ -308,7 +308,7 @@
 
         // Функция для перехода на стартовую страницу
         const goToHomePage = () => {
-            window.location.href = 'site/test_site.html';  // Укажите здесь нужный URL, если отличается от "/"
+            window.location.href = '/index.html';  // Укажите здесь нужный URL, если отличается от "/"
         };
 
         return (
