@@ -54,10 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2>Контакты</h2>
                 <img src="https://www.alfaakb.ru/upload/information_system_5/0/2/9/item_29/item_29.png" width="50" height="50" alt="Карта" class="map-image">
                 <div class="contact-info">
-                    <h3>Помочь проекту или задать вопрос</h3>
-                    <p>Email: info@example.org</p>
+                    <h3>Свяжитесь с нами</h3>
+                    <p>Email: info@russianviews.org</p>
                     <p>Телефон: +7 (XXX) XXX-XX-XX</p>
-                    <p>Адрес: г. Москва, ул. Уличная, д. 42</p>
+                    <p>Адрес: г. Москва, ул. Примерная, д. 123</p>
                 </div>
             </div>
         `
@@ -77,21 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h1 class="book-detail-title">${book.title}</h1>
                         <p class="book-detail-author">${book.author}, ${book.year}</p>
                         <p class="book-detail-description">${book.description}</p>
-                        <a href="reader.html" class="read-button">Читать</a>
+                        <a href="https://storage.yandexcloud.net/russiathroughforeigneyes/reader.html" class="read-button">Читать</a>
                     </div>
                 </div>
             </div>
         `;
 
         contentSection.innerHTML = bookDetailHTML;
-
-        // Сохраняем состояние в localStorage
-        localStorage.setItem('currentState', JSON.stringify({
-            section: 'library',
-            bookId: bookId
-        }));
-
-        // Обновляем URL
         window.location.hash = `book-${bookId}`;
 
         // Обработчик для кнопки "Вернуться к списку книг"
@@ -99,20 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             updateContent('library');
             window.location.hash = 'library';
-            localStorage.setItem('currentState', JSON.stringify({
-                section: 'library'
-            }));
         });
     }
 
     // Функция для обновления контента
     function updateContent(section) {
         contentSection.innerHTML = contents[section] || 'Раздел не найден';
-
-        // Сохраняем текущий раздел в localStorage
-        localStorage.setItem('currentState', JSON.stringify({
-            section: section
-        }));
 
         // Добавляем обработчики для книг, если это страница библиотеки
         if (section === 'library') {
@@ -137,37 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Обработка начального состояния
-    function handleInitialState() {
-        const hash = window.location.hash.replace('#', '');
-        const savedState = localStorage.getItem('currentState');
-        
-        if (savedState) {
-            const state = JSON.parse(savedState);
-            
-            if (state.bookId) {
-                setActiveMenuItem('library');
-                showBookDetail(state.bookId);
-            } else {
-                setActiveMenuItem(state.section);
-                updateContent(state.section);
-            }
-        } else if (hash) {
-            if (hash.startsWith('book-')) {
-                const bookId = hash.replace('book-', '');
-                setActiveMenuItem('library');
-                showBookDetail(bookId);
-            } else {
-                setActiveMenuItem(hash);
-                updateContent(hash);
-            }
-        } else {
-            // Если нет сохраненного состояния и хэша, показываем страницу "О проекте"
-            setActiveMenuItem('about');
-            updateContent('about');
-        }
-    }
-
     // Обработчики событий для пунктов меню
     menuItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -179,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Обработка начального состояния при загрузке страницы
-    handleInitialState();
+    // При загрузке страницы показываем раздел "О проекте"
+    setActiveMenuItem('about');
+    updateContent('about');
 });
