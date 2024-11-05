@@ -147,7 +147,7 @@
     const mockAPI = {
         async fetchChapter(index) {
             try {
-                const response = await fetch('https://github.com/Sorakdvah/RussiaThroughForeignEyes/blob/c325a252fac902d1d750263888a867e02b47501d/book_final.txt');
+                const response = await fetch('/book_final.txt');
                 const text = await response.text();
                 // Разделяем текст на главы по заголовкам
                 const chapters = text.split(/(?=# )/).filter(Boolean);

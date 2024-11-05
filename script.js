@@ -54,10 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2>Контакты</h2>
                 <img src="https://www.alfaakb.ru/upload/information_system_5/0/2/9/item_29/item_29.png" width="50" height="50" alt="Карта" class="map-image">
                 <div class="contact-info">
-                    <h3>Свяжитесь с нами</h3>
-                    <p>Email: info@russianviews.org</p>
+                    <h3>Помочь проекту или задать вопрос</h3>
+                    <p>Email: info@example.org</p>
                     <p>Телефон: +7 (XXX) XXX-XX-XX</p>
-                    <p>Адрес: г. Москва, ул. Примерная, д. 123</p>
+                    <p>Адрес: г. Москва, ул. Уличная, д. 42</p>
                 </div>
             </div>
         `
