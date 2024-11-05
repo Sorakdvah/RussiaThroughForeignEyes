@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h1 class="book-detail-title">${book.title}</h1>
                         <p class="book-detail-author">${book.author}, ${book.year}</p>
                         <p class="book-detail-description">${book.description}</p>
-                        <a href="/reader.html" class="read-button">Читать</a>
+                        <a href="https://github.com/Sorakdvah/RussiaThroughForeignEyes/blob/d62541c0d42039205566336db11bc2b32841b8f5/reader.html" class="read-button">Читать</a>
                     </div>
                 </div>
             </div>
