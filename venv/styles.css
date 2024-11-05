@@ -1,0 +1,329 @@
+body {
+    font-family: Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black; /* Добавляем фоновый цвет для body */
+    min-width: 400px;
+}
+
+.container {
+    min-width: 500px;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+header {
+/*    background-image: url('header-background.jpg');*/
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    position: relative;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#pageTitle {
+
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-weight: 500;
+    color: white;
+    font-size: 5em;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    width: 310px;
+    border-bottom: 7px solid;
+}
+
+/* Обновляем стили навигации */
+nav {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+nav ul li {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+    font-size: 0.9em;
+    position: relative;
+}
+
+/* Стили для активного пункта меню */
+nav ul li a.active {
+    background-color: #1a1a1a;
+    color: white;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-top: 3px solid white;
+}
+
+
+/* Исправленный треугольник для активного пункта */
+nav ul li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+}
+
+main {
+    padding: 20px;
+    min-height: calc(100vh - 300px); /* 100vh - (header + footer) */
+}
+
+.content-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.content-section h2 {
+    text-decoration: underline;
+}
+
+.section-image {
+    width: 100px;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-image {
+    width: 100px;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 280px); /* Фиксированная ширина карточки */
+    gap: 30px;
+    justify-content: left;
+    margin-top: 20px;
+}
+
+/* Стили для карточек книг в библиотеке */
+.library-item {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    width: 280px; /* Фиксированная ширина */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.book-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.book-info {
+    padding: 20px;
+}
+
+.book-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.2em;
+    color: #333;
+    line-height: 1.3;
+}
+
+.book-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.book-image-container {
+    width: 100%;
+    height: 380px; /* Фиксированная высота для изображения */
+    overflow: hidden;
+    background-color: #f5f5f5;
+}
+
+.library-item h3 {
+    margin: 10px 0 5px;
+    font-size: 1.2em;
+}
+
+.library-item p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.library-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.contact-info {
+    margin-top: 20px;
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.contact-info h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.contact-info p {
+    margin: 10px 0;
+    color: #666;
+}
+
+/* Добавляем анимацию для плавного появления контента */
+.content-section {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стили для детальной страницы книги */
+.book-detail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.book-detail-header {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* Обновленные стили для детальной страницы книги */
+.book-detail-image {
+    width: 300px; /* Фиксированная ширина */
+    height: 400px; /* Фиксированная высота */
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-detail-info {
+    flex: 1;
+}
+
+.book-detail-title {
+    margin: 0 0 10px 0;
+    font-size: 2em;
+    color: #333;
+}
+
+.book-detail-author {
+    margin: 0 0 20px 0;
+    font-size: 1.2em;
+    color: #666;
+}
+
+.book-detail-description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Добавляем медиа-запрос для мобильных устройств */
+@media screen and (max-width: 768px) {
+    .book-detail-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: left;
+    }
+
+    .book-detail-image {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .book-detail-info {
+        width: 100%;
+    }
+}
+
+.read-button {
+    display: inline-block;
+    background-color: black;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.read-button:hover {
+    background-color: #333;
+}
+
+.back-to-library {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #666;
+    text-decoration: none;
+}
+
+.back-to-library:hover {
+    color: #333;
+}
