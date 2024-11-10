@@ -295,86 +295,89 @@
         };
     };
 
-
     const ControlPanel = ({
-        toggleToc,
-        increaseFontSize,
-        decreaseFontSize,
-        isVisible,
-        toggleTheme,
-        isDarkTheme,
-        tocIsOpen
+      toggleToc,
+      increaseFontSize,
+      decreaseFontSize,
+      isVisible,
+      toggleTheme,
+      isDarkTheme,
+      tocIsOpen
     }) => {
-        const goToHomePage = () => {
-            window.location.href = 'index.html';
+      const [isAtTop, setIsAtTop] = React.useState(true);
+
+      React.useEffect(() => {
+        const handleScroll = () => {
+          setIsAtTop(window.scrollY === 0);
         };
 
-        return (
-            <div
-                className={`fixed top-0 left-0 right-0 transform transition-transform duration-300 ease-in-out bg-white shadow-md
-                    ${(isVisible || tocIsOpen) ? 'translate-y-0' : '-translate-y-full'}`}
-                style={{
-                    position: '-webkit-sticky', // Специфичный стиль для Safari
-                    willChange: 'transform', // Оптимизация производительности
-                    backfaceVisibility: 'hidden', // Предотвращает глюки рендеринга
-                    WebkitBackfaceVisibility: 'hidden',
-                    zIndex: 1005
-                }}
+        window.addEventListener('scroll', handleScroll);
+        // Начальная проверка
+        handleScroll();
+
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      const goToHomePage = () => {
+        window.location.href = 'index.html';
+      };
+
+      return (
+        <div
+          className={`fixed top-0 left-0 right-0 transform transition-transform duration-300 ease-in-out bg-white shadow-md ${
+            (isVisible || tocIsOpen || isAtTop) ? 'translate-y-0' : '-translate-y-full'
+          }`}
+          style={{
+            position: '-webkit-sticky',
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            zIndex: 1005
+          }}
+        >
+          <div className="relative flex justify-between items-center p-2">
+            <button
+              onClick={toggleToc}
+              className={`w-8 h-8 flex items-center justify-center transition-colors duration-200 ${
+                tocIsOpen ? 'text-zinc-200' : 'text-gray-600'
+              } hover:text-gray-900 active:text-gray-900`}
+              style={{ touchAction: 'manipulation' }}
             >
-                <div className="relative flex justify-between items-center p-2">
-                    {/* Кнопка для переключения оглавления */}
-                    <button
-                        onClick={toggleToc}
-                        className={`w-8 h-8 flex items-center justify-center transition-colors duration-200
-                            ${tocIsOpen ? 'text-zinc-200' : 'text-gray-600'}
-                            hover:text-gray-900 active:text-gray-900`}
-                        style={{ touchAction: 'manipulation' }}
-                    >
-                        ☰
-                    </button>
-
-                    <div className="flex items-center">
-                        {/* Кнопка "Домой" */}
-                        <button
-                            onClick={goToHomePage}
-                            className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900
-                                transition-colors duration-200 mr-2"
-                            style={{ touchAction: 'manipulation' }}
-                        >
-                            ⎗
-                        </button>
-
-                        {/* Кнопки для изменения размера шрифта */}
-                        <button
-                            onClick={decreaseFontSize}
-                            className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900
-                                transition-colors duration-200 mr-2"
-                            style={{ touchAction: 'manipulation' }}
-                        >
-                            A-
-                        </button>
-                        <button
-                            onClick={increaseFontSize}
-                            className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900
-                                transition-colors duration-200 mr-2"
-                            style={{ touchAction: 'manipulation' }}
-                        >
-                            A+
-                        </button>
-
-                        {/* Кнопка для переключения темы */}
-                        <button
-                            onClick={toggleTheme}
-                            className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900
-                                transition-colors duration-200"
-                            style={{ touchAction: 'manipulation' }}
-                        >
-                            {isDarkTheme ? '⚪' : '⚫'}
-                        </button>
-                    </div>
-                </div>
+              ☰
+            </button>
+            <div className="flex items-center">
+              <button
+                onClick={goToHomePage}
+                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors duration-200 mr-2"
+                style={{ touchAction: 'manipulation' }}
+              >
+                ⎗
+              </button>
+              <button
+                onClick={decreaseFontSize}
+                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors duration-200 mr-2"
+                style={{ touchAction: 'manipulation' }}
+              >
+                A-
+              </button>
+              <button
+                onClick={increaseFontSize}
+                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors duration-200 mr-2"
+                style={{ touchAction: 'manipulation' }}
+              >
+                A+
+              </button>
+              <button
+                onClick={toggleTheme}
+                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                style={{ touchAction: 'manipulation' }}
+              >
+                {isDarkTheme ? '⚪' : '⚫'}
+              </button>
             </div>
-        );
+          </div>
+        </div>
+      );
     };
 
     // Модифицированный компонент Footnote со звездочкой
