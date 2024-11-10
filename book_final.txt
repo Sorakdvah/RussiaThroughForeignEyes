@@ -153,7 +153,7 @@ images/4.jpg
       <td>////</td>
     </tr>
     <tr>
-      <td align="right">//||ИТОГО:||//</td>
+      <td align="right">//||ИТОГО:  ||//</td>
       <td>//||40 рублей||//</td>
     </tr>
   </tbody>
