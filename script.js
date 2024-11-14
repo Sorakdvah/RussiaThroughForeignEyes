@@ -11,10 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
             year: '1934',
             image: 'cover.jpg',
             description: `
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-            in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-            sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Джеймс Эдвард Эбби начал карьеру разъездного фотокорреспондента в 1910 году. Он снимал диктаторов и артистов: от Адольфа Гитлера и Бенито Муссолини до Чарли Чаплина и Анны Павловой, запечатлел мексиканскую революцию и гражданскую войну в Испании, зарождение звукового кинематографа в Голливуде и разгул преступности в Чикаго. К услугам Эбби прибегали Нью-Йорк Таймс, Вог и многие другие издания, что позволило ему уже к 1930-м годам стать одним из самых известных и публикуемых фотографов в мире. «Я — эксперт в области сенсаций», — иронично отзывался о себе он сам. Но, бесспорно, самым сенсационным его материалом стала кремлевская фотосессия Иосифа Сталина. Влекомый идеей запечатлеть советского диктатора, в 1932 году Эбби приехал в СССР. Авантюрная и, казалось, безнадежная затея не только увенчалась грандиозным успехом, но и превратилась в восьмимесячное приключение, которое и легло в основу этой книги.
             `
         }
     };
@@ -25,10 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="content-section">
                 <h2>О проекте</h2>
                 <img width="100" src="https://cs13.pikabu.ru/avatars/3025/x3025849-1117298403.png" alt="О проекте" class="section-image">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Путевой очерк до сих пор остается одним из моих любимых литературных жанров, особенно если написан он был непрофессиональным писателем. И в своей любви я не одинок, ведь все эти, порой разрозненные и обрывочные, записки очаровывают читателя еще со времен Геродота. Собранные зачастую из обрывков дневников, иногда талантливые, нередко абсолютно бездарные, они позволяют пройти уникальный путь, зафиксированный в моменте истории, взглянуть на известные события и явления с новой, подчас неожиданной стороны.</p>
+                <p>При всей любви к целому миру я, все же, хочу посвятить этот проект сбору и переводу редких материалов (прежде не выходивших на русском языке), исследующих хорошо известную всем нам местность — Россию. Даже поверхностные, субъективные и предвзятые путевые заметки зачастую дают тот необходимый взгляд со стороны на привычные вещи, порой становясь уникальным слепком целой эпохи.</p>
             </div>
         `,
         'library': `
