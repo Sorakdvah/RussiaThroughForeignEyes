@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2>Контакты</h2>
                 <img src="https://sorakdvah.github.io/RussiaThroughForeignEyes/mail.jpg" width="150" alt="Карта" class="map-image">
                 <div class="contact-info">
+                    <h3>Обратная связь:</h3>
                     <p>Сообщения об обнаруженных ошибках или неточностях, а также благодарности, критику или угрозы, пожалуйста, направляйте по адресу: <b>russiathroughforeigneyes@gmail.com</b></p>
                 </div>
             </div>
