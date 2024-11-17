@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="content-section">
                 <h2>Контакты</h2>
                 <div class="contact-info">
-                    <h3>Обратная связь:</h3>
                     <p>Сообщения об обнаруженных ошибках или неточностях, а также благодарности, критику или угрозы, пожалуйста, направляйте по адресу: <b>russiathroughforeigneyes@gmail.com</b></p>
                 </div>
             </div>
