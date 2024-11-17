@@ -1,3 +1,15 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const minWidth = 430; // Минимальная ширина страницы
+    const screenWidth = window.innerWidth; // Ширина экрана устройства
+    if (screenWidth < minWidth) {
+        const scale = screenWidth / minWidth; // Вычисляем масштаб
+        document.querySelector('meta[name="viewport"]').setAttribute(
+            'content',
+            `width=${minWidth}, initial-scale=${scale}, maximum-scale=${scale}, user-scalable=no`
+        );
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('.menu-item');
     const contentSection = document.getElementById('content');
