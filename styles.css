@@ -3,11 +3,11 @@ body {
     margin: 0;
     padding: 0;
     background-color: black; /* Добавляем фоновый цвет для body */
-    min-width: 350px;
+    min-width: 430px;
 }
 
 .container {
-    min-width: 350px;
+    min-width: 430px;
     max-width: 900px;
     margin: 0 auto;
     background-color: white;
