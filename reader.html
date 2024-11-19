@@ -77,7 +77,7 @@
             justify-content: center;
             align-items: center;
             background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
+            z-index: 1010;
         }
         .enlarged-image {
             max-width: 90%;
@@ -93,6 +93,9 @@
         body.dark-mode .table-of-contents li.active {
             background-color: #2c2c2c;
             color: #ffffff;
+        }
+        .ChapterNavigation {
+            z-index: 1002;
         }
         .footnote-container {
             display: inline;
@@ -550,44 +553,26 @@
         const imageRef = React.useRef(null);
         const captionContainerRef = React.useRef(null);
         const [captionHeight, setCaptionHeight] = React.useState('auto');
-
-        // Состояния для обработки свайпов
         const [touchStart, setTouchStart] = React.useState(null);
         const [touchEnd, setTouchEnd] = React.useState(null);
         const [isSwiping, setIsSwiping] = React.useState(false);
 
-        // Минимальное расстояние для свайпа (в пикселях)
         const minSwipeDistance = 50;
 
-        // Создаем массив изображений с их URL и подписями
         const images = [];
         for (let i = 0; i < content.length; i += 2) {
             images.push({
                 url: content[i],
-                caption: content[i + 1] || ''
+                caption: content[i + 1] || '',
             });
         }
 
-        // Предзагрузка всех изображений
         React.useEffect(() => {
-            images.forEach(image => {
+            images.forEach((image) => {
                 const img = new Image();
                 img.src = image.url;
             });
         }, [images]);
-
-        // Обновление высоты контейнера подписи
-        React.useEffect(() => {
-            const updateCaptionHeight = () => {
-                if (captionContainerRef.current) {
-                    captionContainerRef.current.style.height = 'auto';
-                    setCaptionHeight(`${captionContainerRef.current.scrollHeight}px`);
-                }
-            };
-            updateCaptionHeight();
-            window.addEventListener('resize', updateCaptionHeight);
-            return () => window.removeEventListener('resize', updateCaptionHeight);
-        }, [currentIndex, content]);
 
         const nextImage = (e) => {
             if (e) e.stopPropagation();
@@ -600,13 +585,12 @@
         };
 
         const toggleEnlarged = (e) => {
-            if (isSwiping) return; // Не переключаем если это свайп
+            if (isSwiping) return;
             e.stopPropagation();
             setIsEnlarged(!isEnlarged);
             setIsImageEnlarged(!isEnlarged);
         };
 
-        // Обработчики свайпов
         const onTouchStart = (e) => {
             setTouchEnd(null);
             setTouchStart(e.targetTouches[0].clientX);
@@ -630,12 +614,9 @@
                 prevImage();
             }
 
-            // Сброс состояний
             setTouchStart(null);
             setTouchEnd(null);
 
-            // Устанавливаем таймаут для сброса флага свайпа,
-            // чтобы избежать случайного срабатывания toggleEnlarged
             setTimeout(() => {
                 setIsSwiping(false);
             }, 100);
@@ -643,9 +624,7 @@
 
         return (
             <div className="my-8 p-4 bg-white text-gray-600">
-                {/* Контейнер с фиксированной высотой */}
-                <div className="relative h-[450px]">
-                    {/* Контейнер для изображения */}
+                <div className="relative w-full max-h-screen aspect-video">
                     <div className="absolute inset-0 flex justify-center items-center">
                         <div className="relative w-full h-full">
                             <img
@@ -655,14 +634,13 @@
                                 className="cursor-pointer object-contain w-full h-full"
                                 onClick={toggleEnlarged}
                             />
-                            {/* Водяной знак */}
-                            <div className="absolute bottom-6 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                            <div
+                                className="absolute bottom-[2%] left-1/2 -translate-x-1/2 bg-black/50 text-white whitespace-nowrap text-[clamp(1.5px,0.9vw,10px)] px-[clamp(3px,0.75vw,6px)] py-[clamp(1.5px,0.5vw,3px)] rounded"
+                            >
                                 © James Abbe Archive / www.jamesabbe.com
                             </div>
                         </div>
                     </div>
-
-                    {/* Кнопки навигации */}
                     {images.length > 1 && (
                         <>
                             <button
@@ -681,13 +659,12 @@
                     )}
                 </div>
 
-                {/* Контейнер для подписи */}
                 <div
                     ref={captionContainerRef}
-                    className="mt-4 transition-all duration-300 ease-in-out"
+                    className="mt-4 transition-all duration-300 ease-in-out text-center italic max-w-[90%] mx-auto"
                     style={{
                         height: captionHeight,
-                        minHeight: '1.5em'
+                        minHeight: '1.5em',
                     }}
                 >
                     <span className="block text-center italic max-w-[90%] mx-auto">
@@ -695,14 +672,14 @@
                     </span>
                 </div>
 
-                {/* Увеличенное изображение */}
                 {isEnlarged && (
                     <div
-                        className="fixed inset-0 flex items-center justify-center bg-black/80 z-50 touch-pan-y"
+                        className="fixed inset-0 flex items-center justify-center bg-black/80 touch-pan-y"
                         onClick={toggleEnlarged}
                         onTouchStart={onTouchStart}
                         onTouchMove={onTouchMove}
                         onTouchEnd={onTouchEnd}
+                        style={{ zIndex: 1010 }}
                     >
                         <div className="relative inline-block">
                             <img
@@ -710,7 +687,9 @@
                                 alt={images[currentIndex].caption}
                                 className="max-w-[90vw] max-h-[90vh]"
                             />
-                            <div className="absolute bottom-4 right-4 bg-black/50 text-white text-base px-3 py-1 rounded">
+                            <div
+                                className="absolute bottom-[2%] left-1/2 -translate-x-1/2 bg-black/50 text-white whitespace-nowrap text-[clamp(5px,1.25vw,12px)] px-[clamp(3px,0.75vw,6px)] py-[clamp(1.5px,0.5vw,3px)] rounded"
+                            >
                                 © James Abbe Archive / www.jamesabbe.com
                             </div>
                         </div>
@@ -719,6 +698,7 @@
             </div>
         );
     };
+
 
 
     // Модифицированный компонент TableOfContents
@@ -816,7 +796,7 @@
         const shouldShow = isVisible || forceShow;
 
         return (
-            <div className={`fixed bottom-0 left-0 right-0 z-[1001] transition-all duration-300 ease-in-out
+            <div className={`fixed bottom-0 left-0 right-0 ChapterNavigation transition-all duration-300 ease-in-out
                 ${shouldShow ? 'translate-y-0' : 'translate-y-full'}
                 ${(isMobile && tocIsOpen) ? 'opacity-0' : 'opacity-100'}
                 ${tocIsOpen && !isMobile ? 'pr-72' : ''}`}
