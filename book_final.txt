@@ -115,10 +115,10 @@ images/4.jpg
 <p></p>
 @
 <table>
-  <tbody>
+  <tbody style="font-size: 70%;">
     <tr>
       <td>//Водка, 4 порции (рюмки не больше наперстка)//</td>
-      <td>//16 рублей//</td>
+      <td style="white-space: nowrap;">//16 рублей//</td>
     </tr>
     <tr>
       <td>//Икра, 1 порция (на одну столовую ложку)//</td>
@@ -145,7 +145,7 @@ images/4.jpg
       <td>//4 рубля//</td>
     </tr>
     <tr>
-      <td>//Сигареты, 1 пачка (25 штук)//</td>
+      <td>//Сигареты, 1 пачка (25&nbsp;штук)//</td>
       <td>//4 рубля//</td>
     </tr>
     <tr>
@@ -153,8 +153,8 @@ images/4.jpg
       <td>////</td>
     </tr>
     <tr>
-      <td align="right">//||ИТОГО: ||//</td>
-      <td>//||40 рублей||//</td>
+      <td align="right">//||<pre style="font-family: inherit;">ИТОГО:  </pre>||//</td>
+      <td style="white-space: nowrap;">//||40 рублей||//</td>
     </tr>
   </tbody>
 </table>
