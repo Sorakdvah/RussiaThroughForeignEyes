@@ -1,4 +1,4 @@
-name: Build and Deploy Firebase App
+name: Build and Deploy RussiaThroughForeignEyes
 
 on:
   push:
