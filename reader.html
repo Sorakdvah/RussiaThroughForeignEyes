@@ -1,3 +1,4 @@
+<!-- Счетчик прочтений заработал -->
 <!-- Черновая сборка -- не работает автозагрузка глав, только вручную -->
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +20,8 @@
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
         body {
             transition: background-color 0.3s ease, color 0.3s ease;
@@ -146,6 +149,27 @@
         }
     </style>
 </head>
+<!-- Добавляем инициализацию Firebase -->
+<script>
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASEURL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+database.ref('test').set({ message: 'Hello, Firebase!' })
+    .then(() => console.log('Test data written successfully!'))
+    .catch(error => console.error('Error writing test data:', error));
+</script>
 <script type="text/babel">
     // Константы для кэширования и загрузки
     const CACHE_PREFIX = 'book_chapter_';
@@ -156,6 +180,98 @@
       ACTIVE_CHAPTER: 'reader_active_chapter',
       FONT_SIZE: 'reader_font_size',
     };
+
+    // Код для отслеживания чтения, который будет работать с Babel
+    const ReadingTracker = {
+        userId: null,
+        readChapters: new Set(),
+        currentChapter: null,
+        scrollProgress: 0,
+        hasTrackedCurrentChapter: false,
+
+        init() {
+            let userId = localStorage.getItem('reader_user_id');
+            if (!userId) {
+                userId = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                );
+                localStorage.setItem('reader_user_id', userId);
+            }
+            this.userId = userId;
+
+            const savedChapters = JSON.parse(localStorage.getItem('read_chapters') || '[]');
+            this.readChapters = new Set(savedChapters);
+        },
+
+        setCurrentChapter(chapterIndex) {
+            this.currentChapter = chapterIndex;
+            this.hasTrackedCurrentChapter = this.readChapters.has(chapterIndex.toString());
+            this.scrollProgress = 0;
+        },
+
+        updateScrollProgress(progress) {
+            this.scrollProgress = progress;
+            if (progress >= 0.7 && !this.hasTrackedCurrentChapter && this.currentChapter !== null) {
+                this.trackReading();
+            }
+        },
+
+        trackReading() {
+            if (this.hasTrackedCurrentChapter) {
+                console.log('Chapter already tracked. Skipping...');
+                return;
+            }
+
+            console.log('Tracking reading for chapter:', this.currentChapter);
+
+            const userChapterRef = database.ref(`users/${this.userId}/chapters/${this.currentChapter}`);
+            const chapterRef = database.ref(`chapters/${this.currentChapter}`);
+            const totalReadersRef = database.ref('totalReaders');
+
+            userChapterRef.transaction((currentValue) => {
+                if (currentValue === null) {
+                    console.log('Marking chapter as read in transaction...');
+                    chapterRef.transaction((chapterValue) => (chapterValue || 0) + 1);
+                    totalReadersRef.transaction((totalValue) => (totalValue || 0) + 1);
+                    return true;
+                } else {
+                    console.log('Chapter already tracked in transaction.');
+                    return currentValue;
+                }
+            }).then(() => {
+                this.readChapters.add(this.currentChapter.toString());
+                localStorage.setItem('read_chapters', JSON.stringify([...this.readChapters]));
+                this.hasTrackedCurrentChapter = true;
+            }).catch(error => console.error('Error tracking reading:', error));
+        },
+
+        getReadingStats() {
+            return database.ref().once('value')
+                .then(snapshot => {
+                    const data = snapshot.val() || {};
+                    return {
+                        totalReaders: data.totalReaders || 0,
+                        chapterStats: data.chapters || {}
+                    };
+                })
+                .catch(error => {
+                    console.error('Error getting reading stats:', error);
+                    return null;
+                });
+        },
+
+        getChapterReadCount(chapterIndex) {
+            return database.ref(`chapters/${chapterIndex}`).once('value')
+                .then(snapshot => snapshot.val() || 0)
+                .catch(error => {
+                    console.error('Error fetching chapter read count:', error);
+                    return 0;
+                });
+        }
+    };
+
+    // Создаём один экземпляр трекера для всего приложения
+    const readingTracker = Object.create(ReadingTracker);
 
     // Имитация API для тестирования
     const mockAPI = {
@@ -771,7 +887,8 @@
         onChapterSelect,
         isVisible,
         tocIsOpen,
-        isMobile
+        isMobile,
+        chapterReadCount
     }) => {
         const [forceShow, setForceShow] = React.useState(false);
 
@@ -810,6 +927,11 @@
                             ← Глава {activeChapter}
                         </button>
                     ) : <div />}
+
+                    {/* Добавляем счётчик прочтений в центр */}
+                    <div className="text-sm text-gray-600">
+                        ⚆ {chapterReadCount}
+                    </div>
 
                     {showNextButton ? (
                         <button
@@ -867,12 +989,68 @@
         const scrollTimeout = React.useRef(null);
         const lastScrollUpdateTime = React.useRef(Date.now());
 
+        // Добавляем состояние для статистики чтения
+        const [readingStats, setReadingStats] = React.useState(null);
+
         // Используем useRef для хранения текущей позиции прокрутки
         const currentScrollPosition = React.useRef(0);
 
         const [isManualScrolling, setIsManualScrolling] = React.useState(false);
         const [isChapterTransition, setIsChapterTransition] = React.useState(false);
         const lastAutoScrollTimestamp = React.useRef(0);
+
+        React.useEffect(() => {
+            // Инициализация трекера при монтировании компонента
+            readingTracker.init();
+
+            // Загружаем статистику чтения
+            readingTracker.getReadingStats().then(stats => {
+                if (stats) {
+                    setReadingStats(stats);
+                }
+            });
+        }, []);
+
+        const [currentChapterReadCount, setCurrentChapterReadCount] = React.useState(0);
+
+        React.useEffect(() => {
+            // Обновляем счётчик прочтений для активной главы
+            if (activeChapter !== null) {
+                readingTracker.getChapterReadCount(activeChapter)
+                    .then(setCurrentChapterReadCount);
+            }
+        }, [activeChapter]);
+
+        React.useEffect(() => {
+            let scrollTimeout;
+
+            const handleScroll = () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    if (!chapters[activeChapter]) return;
+
+                    const element = chapterRefs.current[activeChapter];
+                    if (!element) return;
+
+                    const rect = element.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+
+                    const totalHeight = rect.height;
+                    const scrolledHeight = Math.max(0, windowHeight - rect.top);
+                    const progress = Math.min(Math.max(scrolledHeight / totalHeight, 0), 1);
+
+                    console.log('Normalized scroll progress for active chapter:', progress);
+                    readingTracker.updateScrollProgress(progress);
+                }, 100); // Задержка в 100 миллисекунд
+            };
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            return () => window.removeEventListener('scroll', handleScroll);
+        }, [activeChapter, chapters]);
+
+        React.useEffect(() => {
+            readingTracker.setCurrentChapter(activeChapter);
+        }, [activeChapter]);
 
         React.useEffect(() => {
             let scrollTimeout;
@@ -1001,7 +1179,8 @@
         }, [loadChapter, loadedChapterIndices, allChapterTitles.length, activeChapter]);
 
         const handleChapterSelect = async (index) => {
-            if (index < 0 || index >= allChapterTitles.length) {
+            if (index < 0 || index >= allChapterTitles.length || activeChapter === index) {
+                console.log('Invalid chapter selection or chapter already active:', index);
                 return;
             }
 
@@ -1011,31 +1190,29 @@
             // Сбрасываем прокрутку в начало страницы
             window.scrollTo(0, 0);
 
-            // Загружаем выбранную главу, если она еще не загружена
             if (!loadedChapterIndices.includes(index)) {
                 await loadChapter(index);
-                setLoadedChapterIndices(prev => [...prev, index]);
+                setLoadedChapterIndices((prev) => [...prev, index]);
             }
 
+            // Принудительное обновление прогресса после загрузки
+            const element = chapterRefs.current[index];
+            if (element) {
+                const rect = element.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                const totalHeight = rect.height;
+                const scrolledHeight = Math.max(0, windowHeight - rect.top);
+                const progress = Math.min(Math.max(scrolledHeight / totalHeight, 0), 1);
+
+                console.log('Manually triggering scroll progress for chapter:', index, 'Progress:', progress);
+                readingTracker.updateScrollProgress(progress);
+            }
+
+            // Закрываем оглавление, если это мобильная версия
             if (isMobile) {
                 setShowToc(false);
             }
 
-            // Загружаем соседние главы после переключения
-            const loadNeighboringChapters = async () => {
-                const chaptersToLoad = [index - 1, index + 1]
-                    .filter(idx =>
-                        idx >= 0 &&
-                        idx < allChapterTitles.length &&
-                        !loadedChapterIndices.includes(idx)
-                    );
-                await Promise.all(chaptersToLoad.map(idx => loadChapter(idx)));
-            };
-
-            // Асинхронно загружаем соседние главы
-            loadNeighboringChapters();
-
-            // Убираем флаг перехода
             setIsChapterTransition(false);
         };
 
@@ -1175,6 +1352,7 @@
                     allChapterTitles={allChapterTitles}
                     tocIsOpen={showToc}
                     isMobile={isMobile}
+                    chapterReadCount={currentChapterReadCount}
                 />
             </div>
         );
