@@ -123,6 +123,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Обработка начального хэша
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash && contents[currentHash]) {
+        setActiveMenuItem(currentHash);
+        updateContent(currentHash);
+    } else {
+        setActiveMenuItem('about');
+        updateContent('about');
+    }
+
     // Обработчики событий для пунктов меню
     menuItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -134,17 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // При загрузке страницы показываем раздел "О проекте"
-    setActiveMenuItem('about');
-    updateContent('about');
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    const currentHash = window.location.hash.replace('#', '');
-    if (currentHash && contents[currentHash]) {
-        setActiveMenuItem(currentHash);
-        updateContent(currentHash);
-    } else {
+    // При загрузке страницы показываем раздел "О проекте" (если хэша нет)
+    if (!currentHash) {
         setActiveMenuItem('about');
         updateContent('about');
     }
