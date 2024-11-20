@@ -196,7 +196,7 @@ const database = firebase.database();
 
         setCurrentChapter(chapterIndex) {
             this.currentChapter = chapterIndex;
-            this.hasTrackedCurrentChapter = this.readChapters.has(chapterIndex.toString());
+            this.hasTrackedCurrentChapter = this.readChapters.has(String(chapterIndex));
             this.scrollProgress = 0;
         },
 
@@ -228,7 +228,7 @@ const database = firebase.database();
                     return currentValue;
                 }
             }).then(() => {
-                this.readChapters.add(this.currentChapter.toString());
+                this.readChapters.add(String(this.currentChapter));
                 localStorage.setItem('read_chapters', JSON.stringify([...this.readChapters]));
                 this.hasTrackedCurrentChapter = true;
             }).catch(error => console.error('Error tracking reading:', error));
