@@ -138,3 +138,14 @@ document.addEventListener('DOMContentLoaded', function() {
     setActiveMenuItem('about');
     updateContent('about');
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash && contents[currentHash]) {
+        setActiveMenuItem(currentHash);
+        updateContent(currentHash);
+    } else {
+        setActiveMenuItem('about');
+        updateContent('about');
+    }
+});
